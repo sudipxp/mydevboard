@@ -20,7 +20,7 @@ jobs:
 
      - name: Build and push
        uses: docker/build-push-action@v7
-      with:
+       with:
           push: true
           tags: user/devboard-demo:latest
 
