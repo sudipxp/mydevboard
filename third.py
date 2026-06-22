@@ -1,2 +1,0 @@
-
-print("Third.py created")
