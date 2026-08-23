@@ -8,6 +8,11 @@ jobs:
   frontend:
     runs-on: ubuntu-latest
 
+    # This fixes the error by forcing all commands to run inside /frontend
+    defaults:
+      run:
+        working-directory: frontend
+
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4
