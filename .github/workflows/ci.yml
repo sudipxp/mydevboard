@@ -3,6 +3,8 @@ name: CI
 on:
   push:
     branches: [master]
+    paths-ignore:
+      - '.github/workflows/**'
 
 jobs:
   frontend:
@@ -46,3 +48,48 @@ jobs:
           context: ./frontend
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/dev-frontend-img:latest
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+
+    # This fixes the error by forcing all commands to run inside /frontend
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22' # Specify your preferred Go version (e.g., '1.21', '1.22', '^1.22.0')
+          cache: true
+          cache-dependency-path-sub-directory: backend
+
+      - name: Install dependencies
+        run: go mod download
+      
+      - name: Run Lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest # Or specify a version like v1.60
+
+      # 3. Run test suites
+      - name: Run Tests
+        run: go test -v ./...
+        
+      - name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          context: ./backend
+          push: true
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/dev-backend-img:latest
