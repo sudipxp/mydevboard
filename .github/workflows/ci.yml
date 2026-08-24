@@ -60,10 +60,10 @@ jobs:
 
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: '1.22' # Specify your preferred Go version (e.g., '1.21', '1.22', '^1.22.0')
           cache: true
