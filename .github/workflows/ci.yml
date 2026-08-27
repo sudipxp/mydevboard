@@ -73,8 +73,7 @@ jobs:
         with:
           version: latest
           working-directory: backend
-
-       Penting: Run test suites
+       
       - name: Run Tests
         run: go test -v ./...
         
