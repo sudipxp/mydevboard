@@ -1,5 +1,5 @@
 # Stage 1: Resolve and cache all dependencies
-FROM node:20-alpine AS deps
+FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
 # Added --legacy-peer-deps to ignore upstream plugin conflicts
@@ -10,7 +10,7 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 
 # Copy cached node_modules from the previous stage
-COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/node_modules ./node_modules
 COPY . .
 
 # Compile the production assets into the /dist folder
