@@ -94,4 +94,5 @@ jobs:
   # Fixed: Moved under the single jobs hierarchy and corrected indentation
   run-cd:
     uses: ./.github/workflows/CD.yml
-    needs: [frontend, backend] # Recommended: Ensures CD only runs if CI builds pass
+    # Recommended: Ensures CD only runs if CI builds pass
+    needs: [frontend, backend] 
