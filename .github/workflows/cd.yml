@@ -16,6 +16,9 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
+      - name: Copy environment file
+        run: cp .env.example .env
+
       # 2. Build and start your containers
       - name: Start containers
         run: docker compose up -d
