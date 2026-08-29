@@ -30,4 +30,4 @@ jobs:
 
       # Build and start your containers
       - name: Start containers
-        run: docker compose up -d
+        run: docker compose up -d --no-build
