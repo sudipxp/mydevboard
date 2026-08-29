@@ -95,3 +95,4 @@ jobs:
     uses: ./.github/workflows/cd.yml
     # Recommended: Ensures CD only runs if CI builds pass
     needs: [frontend, backend] 
+    secrets: inherit
