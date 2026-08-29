@@ -14,11 +14,20 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Pull Docker Compose images
+        run: docker compose pull
 
       - name: Copy environment file
         run: cp .env.example .env
 
-      # 2. Build and start your containers
+      # Build and start your containers
       - name: Start containers
         run: docker compose up -d
