@@ -22,11 +22,11 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Pull Docker Compose images
-        run: docker compose pull
-
       - name: Copy environment file
         run: cp .env.example .env
+
+      - name: Pull Docker Compose images
+        run: docker compose pull  
 
       # Build and start your containers
       - name: Start containers
