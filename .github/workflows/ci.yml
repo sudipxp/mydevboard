@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [master]
-    # paths-ignore:
-    #   - '.github/workflows/**'
+    branches: [gitactions]
+    paths-ignore:
+      - '.github/workflows/**'
 
 jobs:
   frontend:
@@ -73,8 +73,7 @@ jobs:
         with:
           version: latest
           working-directory: backend
-
-       Penting: Run test suites
+       
       - name: Run Tests
         run: go test -v ./...
         
@@ -93,5 +92,5 @@ jobs:
 
   # Fixed: Moved under the single jobs hierarchy and corrected indentation
   run-cd:
-    uses: ./.github/workflows/CD.yml
+    uses: ./.github/workflows/cd.yml
     needs: [frontend, backend] # Recommended: Ensures CD only runs if CI builds pass
