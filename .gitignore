@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # node
 node_modules/
 dist/
@@ -15,3 +16,10 @@ dist/
 
 # claude's personal scratch notes (local only)
 CLAUDE.md
+=======
+node_modules/
+dist/
+.DS_Store
+*.local
+.vite/
+>>>>>>> 6bf8e56 (All files are replaced)
