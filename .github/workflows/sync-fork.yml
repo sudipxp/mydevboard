@@ -1,0 +1,38 @@
+name: Sync Fork
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Sync upstream changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Add the upstream repository
+          git remote add upstream https://github.com/LondheShubham153/devboard.git
+          git fetch upstream
+          
+          # Checkout master and merge, favoring upstream for code conflicts
+          git checkout master
+          git merge upstream/master -X theirs --allow-unrelated-histories -m "Sync upstream changes"
+          
+          # Drop the incoming workflows folder so GitHub security allows the push
+          git rm -rf .github/ || true
+          git reset .github/ || true
+          git checkout HEAD -- .github/ || true
+          git commit --amend -m "Sync upstream code (excluding workflows)" || true
+          
+          # Push the clean code back to your repository
+          git push origin master --force

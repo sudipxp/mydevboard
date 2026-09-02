@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    # paths-ignore:
+    #   - '.github/workflows/**'
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'       
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+      
+      - name: Run Lint
+        run: npm run lint --if-present      
+
+      - name: Run Tests
+        run: npm test
+        
+      - name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          context: ./frontend
+          push: true
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/dev-frontend-img:latest
+
+  backend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4 # Fixed: Downgraded from v7 to the correct v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.22'
+          cache: true
+          cache-dependency-path-sub-directory: backend
+
+      - name: Install dependencies
+        run: go mod download
+      
+      - name: Run Lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest
+          working-directory: backend
+       
+      - name: Run Tests
+        run: go test -v ./...
+        
+      - name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          context: ./backend
+          push: true
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/dev-backend-img:latest
+
+  # Fixed: Moved under the single jobs hierarchy and corrected indentation
+  # run-cd:
+  #   uses: ./.github/workflows/cd.yml
+  #   needs: [frontend, backend] # Recommended: Ensures CD only runs if CI builds pass
