@@ -1,7 +1,9 @@
+# Workflow goal is to build and push to Docker
 name: CI
 
 on:
   push:
+<<<<<<< HEAD
     branches: [gitactions]
     paths-ignore:
       - '.github/workflows/**'
@@ -94,3 +96,30 @@ jobs:
   run-cd:
     uses: ./.github/workflows/cd.yml
     needs: [frontend, backend] # Recommended: Ensures CD only runs if CI builds pass
+=======
+  branches: [main]
+
+jobs:
+ build-and-push:
+   runs-on: ubuntu-latest
+
+   steps:
+     - name: Checkout the code
+       uses: actions/checkout@v7
+
+     - name: Login to Docker Hub
+       uses: docker/login-action@v4
+       with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}     
+
+     - name: Build and push
+       uses: docker/build-push-action@v7
+      with:
+          push: true
+          tags: user/devboard-demo:latest
+
+    
+  
+  
+>>>>>>> 8ff5a14 (Create ci.yml for build and push to Docker)
