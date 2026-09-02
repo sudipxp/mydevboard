@@ -2,7 +2,7 @@ name: matrix
 
 on:
   workflow_dispatch: # Fixed typo here
-  push:
+  # push:
 
 jobs:
   matrix-frontend:
