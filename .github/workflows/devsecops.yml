@@ -5,10 +5,10 @@ on:
     branches: [main]
 
 jobs:
-  devsecops:
-    
-    # run code quality
+  # Job 1: Executes your code quality checks
+  code-quality-check:
     uses: ./.github/workflows/code-quality.yml
 
-    # run secret scanning
+  # Job 2: Executes your secret scanning checks
+  secret-scanning-check:
     uses: ./.github/workflows/secret-scan.yml
