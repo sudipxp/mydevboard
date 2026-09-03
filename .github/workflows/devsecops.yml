@@ -1,0 +1,10 @@
+name: code-quality
+
+on:
+  workflow_call:
+
+jobs:
+  devsecops:
+    # Reusable workflows are called directly at the job level.
+    # The 'runs_on' and 'steps' keys must be removed entirely from this job.
+    uses: ./.github/workflows/code-quality.yml
