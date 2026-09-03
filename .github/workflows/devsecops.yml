@@ -1,10 +1,14 @@
 name: code-quality
 
 on:
-  workflow_call:
+  push:
+    branches: [main]
 
 jobs:
   devsecops:
-    # Reusable workflows are called directly at the job level.
-    # The 'runs_on' and 'steps' keys must be removed entirely from this job.
+    
+    # run code quality
     uses: ./.github/workflows/code-quality.yml
+
+    # run secret scanning
+    uses: ./.github/workflows/secret-scan.yml
