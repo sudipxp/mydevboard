@@ -5,10 +5,16 @@ on:
     branches: [main]
 
 jobs:
-  # Job 1: Executes your code quality checks
+  # Job 1: Executes code quality checks
   code-quality-check:
     uses: ./.github/workflows/code-quality.yml
 
-  # Job 2: Executes your secret scanning checks
+  # Job 2: Executes secret scanning checks
   secret-scanning-check:
     uses: ./.github/workflows/secret-scan.yml
+
+  # Job 3: Executes dependency scanning checks
+  secret-scanning-check:
+    uses: ./.github/workflows/dependency-scan.yml
+
+  
