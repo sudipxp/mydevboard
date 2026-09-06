@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Scan Backend Dockerfile
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: 'config'
           scan-ref: 'backend/' # Looks for Dockerfiles in the backend directory
@@ -21,7 +21,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
 
       - name: Scan Frontend Dockerfile
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: 'config'
           scan-ref: 'frontend/' # Looks for Dockerfiles in the frontend directory
