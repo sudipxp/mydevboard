@@ -1,5 +1,5 @@
 # Stage 1: Resolve and cache all dependencies
-FROM node:20-alpine AS builder
+FROM node:20-alpinevdddf AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
 # Added --legacy-peer-deps to ignore upstream plugin conflicts
