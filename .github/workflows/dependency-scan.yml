@@ -17,7 +17,7 @@ jobs:
           # Points the caching mechanism to your backend folder
           cache-dependency-path: backend/go.sum
       
-       name: Download Go dependencies
+      - name: Download Go dependencies
         working-directory: backend
         run: |
           go mod download
