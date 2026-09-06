@@ -1,7 +1,7 @@
 # ==========================================
 # STAGE 1: Build the Go application binary
 # ==========================================
-FROM golang:1.23-alpine AS builder
+FROM golang:1.23-alpines AS builder
 
 # Set the working directory inside the build container
 WORKDIR /app
