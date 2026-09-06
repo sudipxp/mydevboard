@@ -1,4 +1,4 @@
-name: Go Dependency Vulnerability Scan
+name: Dependency Scan
 
 on:
   workflow_call:

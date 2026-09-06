@@ -6,15 +6,21 @@ on:
 
 jobs:
   # Job 1: Executes code quality checks
-  code-quality-check:
+  code-check:
     uses: ./.github/workflows/code-quality.yml
 
   # Job 2: Executes secret scanning checks
-  secret-scanning-check:
+  secret-check:
     uses: ./.github/workflows/secret-scan.yml
 
   # Job 3: Executes dependency scanning checks
-  dependency-scanning-check:
+  dependency-check:
     uses: ./.github/workflows/dependency-scan.yml
+
+# Job 4: Executes dockerfile scanning checks
+  dockerfile-check: 
+    uses: ./.github/workflows/docker-scan.yml
+
+  
 
   

@@ -1,0 +1,30 @@
+name : Docker scan
+
+on:
+  workflow_call:
+
+jobs:
+  dockerscan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Scan Backend Dockerfile
+        uses: aquasecurity/trivy-action@0.29.0
+        with:
+          scan-type: 'config'
+          scan-ref: 'backend/' # Looks for Dockerfiles in the backend directory
+          format: 'table'
+          exit-code: '0'       # Change to '1' if you want vulnerabilities to break the build
+          severity: 'CRITICAL,HIGH'
+
+      - name: Scan Frontend Dockerfile
+        uses: aquasecurity/trivy-action@0.29.0
+        with:
+          scan-type: 'config'
+          scan-ref: 'frontend/' # Looks for Dockerfiles in the frontend directory
+          format: 'table'
+          exit-code: '0'       # Change to '0' to keep it advisory, '1' to enforce strict security
+          severity: 'CRITICAL,HIGH'
