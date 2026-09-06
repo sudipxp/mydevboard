@@ -21,12 +21,10 @@ jobs:
         run: go install golang.org/x/vuln/cmd/govulncheck@latest
 
       - name: Run govulncheck
-        continue-on-error: true
-        run: govulncheck
-        with:
-          go-package: ./...
-          # Tells the action to look inside your backend directory
-          work-dir: backend
+        continue-on-error: true        
+        env:
+          GOTOOLCHAIN: local
+        run: govulncheck -C backend ./...
 
       - name: Setup Node.js
         uses: actions/setup-node@v5
