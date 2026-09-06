@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Go
         uses: actions/setup-go@v5
@@ -16,9 +16,15 @@ jobs:
           go-version: '1.22'
           # Points the caching mechanism to your backend folder
           cache-dependency-path: backend/go.sum
+      
+       name: Download Go dependencies
+        working-directory: backend
+        run: |
+          go mod download
+          go mod tidy
 
       - name: Run govulncheck
-        continue-on-error: true
+        # continue-on-error: true
         uses: golang/govulncheck-action@v1
         with:
           go-package: ./...
@@ -26,7 +32,7 @@ jobs:
           work-dir: backend
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '24' # Change this to your required Node version
           cache: 'npm'
@@ -34,7 +40,7 @@ jobs:
 
       - name: Install Frontend Dependencies
         working-directory: frontend
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Run npm audit
         working-directory: frontend
