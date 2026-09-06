@@ -23,3 +23,18 @@ jobs:
           go-package: ./...
           # Tells the action to look inside your backend directory
           work-dir: backend
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24' # Change this to your required Node version
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Frontend Dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Run npm audit
+        working-directory: frontend
+        run: npm audit
