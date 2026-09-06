@@ -1,5 +1,5 @@
 # Stage 1: Resolve and cache all dependencies
-FROM node:20-alpinevdddf AS builder
+FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
 # Added --legacy-peer-deps to ignore upstream plugin conflicts
@@ -15,6 +15,9 @@ COPY . .
 
 # Compile the production assets into the /dist folder
 RUN npm run build
+
+# Switch away from root to the non-privileged user
+USER appuser
 
 EXPOSE 4173
 
