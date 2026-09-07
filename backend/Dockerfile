@@ -11,7 +11,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 # Copy the rest of the application source code
-COPY . .
+COPY . . .
 
 # Compile a statically linked binary for production
 # CGO_ENABLED=0 disables dynamic C0 dependencies for maximum portability
