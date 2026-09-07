@@ -1,7 +1,7 @@
 # ==========================================
 # STAGE 1: Build the Go application binary
 # ==========================================
-FROM golang:1.23-alpineadadadsd AS builder
+FROM golang:1.23-alpine AS builder
 
 # Set the working directory inside the build container
 WORKDIR /app
@@ -11,7 +11,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 # Copy the rest of the application source code
-COPY . . .
+COPY . .
 
 # Compile a statically linked binary for production
 # CGO_ENABLED=0 disables dynamic C0 dependencies for maximum portability
