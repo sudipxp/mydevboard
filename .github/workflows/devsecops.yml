@@ -20,6 +20,10 @@ jobs:
 # Job 4: Executes dockerfile scanning checks
   dockerfile-check: 
     uses: ./.github/workflows/docker-scan.yml
+  
+  # Job 5: Executes sonar scanning checks
+  sonar-check: 
+    uses: ./.github/workflows/sonar-scan.yml
 
   
 
