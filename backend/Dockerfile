@@ -1,17 +1,14 @@
 # ==========================================
 # STAGE 1: Build the Go application binary
 # ==========================================
-FROM golang:1.27-alpine AS builder
+FROM golang:1.23-alpine AS builder
 
 # Set the working directory inside the build container
 WORKDIR /app
 
-# Copy go.mod only
-COPY go.mod ./
-
-# Download and tidy dependencies (creates go.sum)
+# Copy dependency manifests first to leverage Docker caching
+COPY go.mod go.sum ./
 RUN go mod download
-RUN go mod tidy
 
 # Copy the rest of the application source code
 COPY . .
