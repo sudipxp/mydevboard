@@ -6,16 +6,16 @@ FROM golang:1.27-alpine AS builder
 # Set the working directory inside the build container
 WORKDIR /app
 
-# Copy dependency manifests first to leverage Docker caching
+# Copy dependency manifests
 COPY go.mod go.sum ./
-RUN go mod download
+
+# Clean and regenerate dependencies inside container
+RUN go clean -modcache && go mod tidy && go mod download
 
 # Copy the rest of the application source code
 COPY . .
 
 # Compile a statically linked binary for production
-# CGO_ENABLED=0 disables dynamic C0 dependencies for maximum portability
-# -ldflags="-s -w" strips debug information to minimize binary size
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o dev-backend .
 
 # ==========================================
