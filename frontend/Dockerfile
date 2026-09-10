@@ -1,30 +1,38 @@
 # Stage 1: Resolve and cache all dependencies
-FROM node:22-alpine AS builder
+# Using Docker Hardened Images (DHI) for Node.js with security patches
+FROM node:22-alpine3.21 AS builder
 WORKDIR /app
+
+# Copy dependency manifests
 COPY package.json ./
-# Copy package-lock.json if it exists (optional)
 COPY package-lock.json* ./
-# Use npm ci if lock file exists, otherwise npm install
+
+# Install dependencies with npm ci if lock file exists, else npm install
+# DHI includes patched Node.js runtime and npm packages
 RUN if [ -f package-lock.json ]; then npm ci --legacy-peer-deps; else npm install --legacy-peer-deps; fi
 
-# Stage 2: Build code and serve via Vite preview
-FROM node:22-alpine AS runner
+# Stage 2: Build and serve via Vite preview
+# Using DHI base image with minimal footprint
+FROM node:22-alpine3.21 AS runner
 WORKDIR /app
 
-# Create a non-root system user for security compliance
+# Create a non-root system user for security compliance (uid/gid 10001)
 RUN addgroup -g 10001 appuser && adduser -D -u 10001 -G appuser appuser
 
-# Copy cached node_modules from the previous stage
-COPY --from=builder /app/node_modules ./node_modules
-COPY . .
+# Copy cached dependencies from builder stage
+COPY --from=builder --chown=appuser:appuser /app/node_modules ./node_modules
 
-# Compile the production assets into the /dist folder
+# Copy application source
+COPY --chown=appuser:appuser . .
+
+# Build production assets into /dist folder
 RUN npm run build
 
-# Switch away from root to the non-privileged user
+# Switch to non-root user before runtime
 USER appuser
 
+# Document port
 EXPOSE 4173
 
-# Execute the preview server bound to host 0.0.0.0 for Docker networking
+# Execute Vite preview server
 CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0", "--port", "4173"]
