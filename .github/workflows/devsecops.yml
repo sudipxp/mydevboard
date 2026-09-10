@@ -26,6 +26,11 @@ jobs:
   #   uses: ./.github/workflows/sonar-scan.yml
   #   secrets: inherit
 
+# Job 6: Push to docker hub
+  docker-push: 
+    uses: ./.github/workflows/docker-push.yml
+    secrets: inherit
+    needs: ['dockerfile-check']
   
 
   
