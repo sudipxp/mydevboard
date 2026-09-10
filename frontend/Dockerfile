@@ -3,7 +3,7 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
 # Added --legacy-peer-deps to ignore upstream plugin conflicts
-RUN npm ci --legacy-peer-deps
+RUN npm install --legacy-peer-deps
 
 # Stage 2: Build code and serve via Vite preview
 FROM node:22-alpine AS runner
