@@ -30,7 +30,13 @@ jobs:
   docker-push: 
     uses: ./.github/workflows/docker-push.yml
     secrets: inherit
-    needs: ['dockerfile-check']
+    needs: ['code-check, secret-check, dependency-check, dockerfile-check']
+
+# Job 6: Deploy the code
+  deploy: 
+    uses: ./.github/workflows/cd.yml
+    secrets: inherit
+    needs: ['docker-push']
   
 
   
