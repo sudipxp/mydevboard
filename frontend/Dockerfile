@@ -1,33 +1,20 @@
-# Stage 1: Build the application assets safely
+# Stage 1: Resolve and cache all dependencies
 FROM node:20-alpine AS builder
 WORKDIR /app
-
-# Copy dependency manifests
 COPY package.json package-lock.json ./
-RUN npm install --legacy-peer-deps
+# Added --legacy-peer-deps to ignore upstream plugin conflicts
+RUN npm ci --legacy-peer-deps
 
-# Copy source code and build the production assets into /app/dist
-COPY . .
-RUN npm run build
-
-# Stage 2: Minimal Production Runtime Environment
+# Stage 2: Build code and serve via Vite preview
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-# Set production environment variable flag
-# ENV NODE_ENV=production
+# Copy cached node_modules from the previous stage
+COPY --from=builder /app/node_modules ./node_modules
+COPY . .
 
-# Copy only production dependencies and compiled files, granting access to the native non-root 'node' user
-COPY --from=builder --chown=node:node /app/package.json ./package.json
-COPY --from=builder --chown=node:node /app/node_modules ./node_modules
-COPY --from=builder --chown=node:node /app/dist ./dist
-
-# Vite preview requires access to the config file at runtime to serve assets properly
-COPY --from=builder --chown=node:node /app/vite.config.js* ./
-COPY --from=builder --chown=node:node /app/vite.config.ts* ./
-
-# Switch execution context to the safe non-root user
-USER node
+# Compile the production assets into the /dist folder
+RUN npm run build
 
 EXPOSE 4173
 
