@@ -1,9 +1,11 @@
 # Stage 1: Resolve and cache all dependencies
 FROM node:22-alpine AS builder
 WORKDIR /app
-COPY package.json package-lock.json ./
-# Added --legacy-peer-deps to ignore upstream plugin conflicts
-RUN npm install --legacy-peer-deps
+COPY package.json ./
+# Copy package-lock.json if it exists (optional)
+COPY package-lock.json* ./
+# Use npm ci if lock file exists, otherwise npm install
+RUN if [ -f package-lock.json ]; then npm ci --legacy-peer-deps; else npm install --legacy-peer-deps; fi
 
 # Stage 2: Build code and serve via Vite preview
 FROM node:22-alpine AS runner
