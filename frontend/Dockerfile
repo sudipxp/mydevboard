@@ -15,7 +15,7 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 
 # Set production environment variable flag
-ENV NODE_ENV=production
+# ENV NODE_ENV=production
 
 # Copy only production dependencies and compiled files, granting access to the native non-root 'node' user
 COPY --from=builder --chown=node:node /app/package.json ./package.json
