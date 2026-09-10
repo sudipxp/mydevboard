@@ -10,10 +10,6 @@ RUN npm ci --legacy-peer-deps
 COPY . .
 RUN npm run build
 
-# Remove development-only dependencies to save space and clear vulnerabilities
-RUN npm prune --production
-
-
 # Stage 2: Minimal Production Runtime Environment
 FROM node:20-alpine AS runner
 WORKDIR /app
