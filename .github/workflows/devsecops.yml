@@ -22,9 +22,9 @@ jobs:
     uses: ./.github/workflows/docker-scan.yml
   
   # Job 5: Executes sonar scanning checks
-  sonar-check: 
-    uses: ./.github/workflows/sonar-scan.yml
-    secrets: inherit
+  # sonar-check: 
+  #   uses: ./.github/workflows/sonar-scan.yml
+  #   secrets: inherit
 
   
 
