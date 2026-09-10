@@ -1,13 +1,16 @@
 # Stage 1: Resolve and cache all dependencies
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
 # Added --legacy-peer-deps to ignore upstream plugin conflicts
 RUN npm ci --legacy-peer-deps
 
 # Stage 2: Build code and serve via Vite preview
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 WORKDIR /app
+
+# Create a non-root system user for security compliance
+RUN addgroup -g 10001 appuser && adduser -D -u 10001 -G appuser appuser
 
 # Copy cached node_modules from the previous stage
 COPY --from=builder /app/node_modules ./node_modules
